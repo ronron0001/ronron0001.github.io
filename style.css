@@ -698,3 +698,7 @@ ul.bulleted {
   list-style: disc !important;
   padding-left: 20px;
 }
+sub {
+  vertical-align: sub;
+  font-size: smaller;
+}
