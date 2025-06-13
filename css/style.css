@@ -652,12 +652,12 @@ blockquote p {
   #flink {
     float: none;
   }
-  
+
   h1, h2, h3 {
-    line-height: 1.4;
-    padding-bottom: 0.2em;
+    line-height: 1.6 !important;
     margin-top: 1em;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.6em;
+    padding: 0;
     overflow: visible !important;
   }
 }
