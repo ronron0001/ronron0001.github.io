@@ -553,19 +553,21 @@ blockquote p {
 @media screen and (max-width: 768px) {
   body {
     font-size: 14px;
-    padding: 0 10px;
+    padding: 0 10px;  /* ←左右に余白を作る */
     line-height: 1.6;
+    box-sizing: border-box;
   }
 
   #container {
     width: 100%;
-    padding: 10px 0;
+    padding: 0;
   }
 
   header {
     width: 100%;
     text-align: center;
-    padding: 10px 0;
+    padding: 15px 0 10px;
+    margin-bottom: 10px;
   }
 
   header h1 {
@@ -573,24 +575,29 @@ blockquote p {
     margin: 0;
   }
 
-  #top-nav-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 20px;
+  #top {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
   }
 
+  #top img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* ナビボタンを画像の下に配置し縦並びに */
   #nav_frame {
     float: none;
-    width: 50%;
-    margin: 0;
+    width: 100%;
+    margin: 0 auto 20px;
   }
 
   #main-nav ul#nav1 {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
     padding: 0;
     margin: 0;
   }
@@ -601,7 +608,7 @@ blockquote p {
 
   #main-nav ul#nav1 a {
     display: block;
-    padding: 8px 12px;
+    padding: 10px 15px;
     background-color: #0a891e;
     color: white;
     border-radius: 4px;
@@ -613,25 +620,18 @@ blockquote p {
     background-color: #6fd47f;
   }
 
-  #top {
-    width: 50%;
-  }
-
-  #top img {
-    width: 100%;
-    height: auto;
-  }
-
   #main {
     width: 100%;
     float: none;
-    padding: 0;
+    padding: 0 10px;  /* ←本文にも余白を追加 */
+    box-sizing: border-box;
   }
 
   #link {
     width: 100%;
     margin-top: 30px;
-    text-align: left;
+    padding: 0 10px;
+    box-sizing: border-box;
   }
 
   #footer_color {
@@ -642,7 +642,8 @@ blockquote p {
     text-align: center;
   }
 
-  #copy, #flink {
+  #copy,
+  #flink {
     float: none;
     margin: 10px 0;
   }
