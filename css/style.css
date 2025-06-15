@@ -655,11 +655,11 @@ blockquote p {
 
   h1 {
     font-size: 16px;
-    padding: 12px 10px;
-    line-height: 1.4;
+    padding: 4px 0;
+    line-height: 1.6;
     margin: 0;
     background-color: #0a891e;
     color: white;
-    text-align: center;
+    text-align: left;
   }
 }
