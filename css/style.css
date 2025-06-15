@@ -655,8 +655,8 @@ blockquote p {
 
   h1 {
     font-size: 16px;
-    padding: 4px 0;
-    line-height: 1.6;
+    padding: 12px 0;
+    line-height: 2;
     margin: 0;
     background-color: #0a891e;
     color: white;
