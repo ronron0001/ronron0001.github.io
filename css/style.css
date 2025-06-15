@@ -228,7 +228,8 @@ footer {
 /* top */
 
 #top {
-	width: 750px;
+	width: 100%;   /* 親要素にフィット */
+  	height: auto;  /* アスペクト比を維持して自動調整 */
 	margin: 0 0 15px;
 	float: right;
 }
