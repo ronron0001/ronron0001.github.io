@@ -228,10 +228,16 @@ footer {
 /* top */
 
 #top {
-	width: 100%;   /* 親要素にフィット */
-  	height: auto;  /* アスペクト比を維持して自動調整 */
-	margin: 0 0 15px;
-	float: right;
+  width: 750px;         /* PC用横幅に合わせる */
+  height: auto;         /* 高さは画像に任せる */
+  margin: 0 0 15px;
+  float: right;
+}
+
+#top img {
+  width: 100%;          /* 親要素にフィットさせる */
+  height: auto;         /* 縦横比を維持する */
+  display: block;       /* 余白を消すため */
 }
 
 #news {
@@ -579,12 +585,14 @@ blockquote p {
   }
 
   #top {
+    width: 100%;        /* スマホ画面幅いっぱいに */
     margin: 10px 0;
+    float: none;        /* float解除 */
   }
 
   #top img {
-    width: 100%;
-    height: auto;
+    width: 100%;        /* スマホ幅にフィット */
+    height: auto;       /* アスペクト比維持 */
     display: block;
   }
 
