@@ -555,26 +555,19 @@ blockquote p {
 }
 
 .book-entry {
-  display: flex;
-  flex-wrap: wrap; /* 右側が足りなければ折り返す */
-  align-items: flex-start;
-  gap: 15px;
-  margin-bottom: 20px;
+  overflow: hidden; /* float解除 */
+  margin-bottom: 30px;
 }
 
 .book-image {
-  flex: 0 0 auto; /* 固定サイズ */
-}
-
-.book-image img {
+  float: left;
   width: 100px;
   height: auto;
-  display: block;
+  margin: 0 15px 10px 0;
 }
 
-.book-description {
-  flex: 1 1 0;
-  min-width: 200px;
+.book-text {
+  text-align: justify;
 }
 
 /* ===============================
@@ -694,6 +687,16 @@ blockquote p {
     margin: 0;
     background-color: #0a891e;
     color: white;
+    text-align: left;
+  }
+
+  .book-image {
+    float: none;
+    display: block;
+    margin: 0 auto 10px;
+  }
+
+  .book-text {
     text-align: left;
   }
 }
