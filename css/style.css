@@ -554,6 +554,23 @@ blockquote p {
 	text-indent: 0;
 }
 
+.book-entry {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  gap: 15px;
+}
+
+.book-image img {
+  width: 100px;
+  height: auto;
+  display: block;
+}
+
+.book-description {
+  flex: 1;
+}
+
 /* ===============================
    スマホ用スタイル（幅768px以下）
    =============================== */
