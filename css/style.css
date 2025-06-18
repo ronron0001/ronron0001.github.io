@@ -555,19 +555,20 @@ blockquote p {
 }
 
 .book-entry {
-  overflow: hidden; /* float解除のため */
-  margin-bottom: 30px;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  gap: 15px;
 }
 
-.book-image {
-  float: left;
-  margin: 0 15px 10px 0;
-  width: 100px !important;
+.book-image img {
+  width: 100px;
   height: auto;
+  display: block;
 }
 
 .book-description {
-  text-align: justify;
+  flex: 1;
 }
 
 /* ===============================
