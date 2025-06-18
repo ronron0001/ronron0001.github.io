@@ -556,9 +556,14 @@ blockquote p {
 
 .book-entry {
   display: flex;
+  flex-wrap: wrap; /* 右側が足りなければ折り返す */
   align-items: flex-start;
-  margin-bottom: 20px;
   gap: 15px;
+  margin-bottom: 20px;
+}
+
+.book-image {
+  flex: 0 0 auto; /* 固定サイズ */
 }
 
 .book-image img {
@@ -568,7 +573,8 @@ blockquote p {
 }
 
 .book-description {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 200px;
 }
 
 /* ===============================
