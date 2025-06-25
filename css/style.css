@@ -720,6 +720,7 @@ mjx-container[display="true"] {
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 #xy-simulator .control-panel > div {
