@@ -10,6 +10,7 @@
 <![endif]-->
 <link href="../css/style.css" rel="stylesheet" media="all">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </head>
 
 <body>
@@ -38,15 +39,21 @@
     <h1>イジング模型シミュレーター</h1>
     <h2>イジング模型とは？</h2>
         <p>
-            イジング模型は、物理学における統計力学のモデルで、スピン系の相転移を研究するために広く用いられています。スピンは、磁性体の原子や分子が持つ磁気モーメントを表し、通常は上向き（+1）または下向き（-1）の二つの状態を取ります。イジング模型では、隣接するスピン同士の相互作用を考慮し、全体のエネルギーを最小化するようにスピンの配置が変化します。特に、温度が低いとスピンは整列しやすく、磁性体が強い磁気を示すことが知られています。一方、温度が高いとスピンの配置はランダムになり、磁性体の磁気は弱くなります。
+            イジング模型は、統計力学でよく用いられるモデルで、スピン系の相転移をうまく記述できることが知られている。スピンは、電子が持つ内部自由度のことで大きさ1/2を持つことが知られている（詳しくは、量子力学を勉強してください。一般に、フェルミオンはスピンの大きさとして半整数、ボソンは整数値を取ることが知られている。）。ここでは、二次元格子上に電子が並んだ系に対して、各点で電子のスピンが、紙面垂直方向に対し上向き（+1/2）または下向き（-1/2）を取るものとします。現実の物質では、スピンは二値ではなくこの二状態の重ね合わせ状態（確率pでスピンが上向き、確率1-pでスピンが下向きを取るような状態）も取ることができるが、イジング模型ではスピンの取りうる値は二値で考える。この意味で、イジング模型は古典スピン系とも言われる（量子スピン系を記述する模型としてはハイゼンベルグ模型がある）。ここではイジング模型のシミュレーションを通じてスピン系の物理（磁性の基礎となる考え方）を知ってもらおうと思う。
         </p>
         <p>
-            このシミュレーターでは、2次元イジング模型を用いて、スピンの配置や磁化の変化を可視化します。温度や相互作用の強さを調整することで、スピン系の挙動を観察できます。特に、相転移の様子やスピンの整列状態をリアルタイムで確認することができます。
+            解析力学や量子力学を学んだことのない人には、少し突拍子もないように思えるかもしれないが、最初にイジング模型のハミルトニアン\(H\)（系全体のエネルギーを与えるものだと思ってほしい）を見てみよう。
+            $$
+            H = -J \sum_{\langle i,j \rangle} S_{i} \cdot S_{j}
+            $$
+            ここで、\(S_{i}\)は格子点 \(i\) におけるスピンの値（+1/2または-1/2）を表し、\(\langle i,j \rangle\) は隣接する格子点の組み合わせを表している。また、\(J\)はスピン間の相互作用の強さを表すパラメータである。このモデルの基底状態（エネルギーの一番低い状態）は、上のハミルトニアン\(H\)を最小化するようなスピン配置で与えられる。例えば、\(J\)が正の値の場合はスピンが同じ向きに揃った状態、負の値の場合は反対向きに揃った状態である。これは温度がゼロの場合の話である。温度が高くなると、熱揺らぎによってスピンがバラバラに配置できるようになる。これは、少し難しい言葉で言うと、ハミルトニアンによるエネルギーの利得とエントロピーの利得による競合で理解できる。難しい説明はこの辺にして、シミュレーターを触りながらこの辺の事情を体感してみてほしい。
         </p>
         <p>
-            とりあえずシミュレーターを動かしてみましょう！
-        </p> 
-    
+            色々なパラメータで遊んでほしいが、先に少し遊び方のヒントを与えておこう。まず、重要な要素は温度\(T\)と相互作用\(J\)の比である。つまり、この比が一緒であれば、同じ現象が見られる。例えば、\(T=0.8\)と\(J=1.0\)の組み合わせは、\(T=80\)と\(J=100\)の組み合わせと同じ物理現象を示す。次に重要な点が相互作用\(J\)の符号である。\(J\)が正の場合はスピンが同じ向きに揃う傾向があり、\(J\)が負の場合はスピンが逆向きに揃う傾向が見えるはずである。最後に注意だが、実際にプログラムが裏で計算しながら出力しているので、格子サイズ\(N\)が大きすぎると計算が重くなる。また、ゆっくり各ステップの変化を観察したい場合には、描画時間を長めに設定してみてほしい。
+        </p>
+        <p>
+            またグラフについての補足事項として、左側はスピンの実空間での配置を各ステップごとに描画している。青（赤）がスピン上（下）向きに対応している。右側の図は、各ステップでの磁化（磁石の強さに対応する値）をプロットしたものである。少し込み入った話もしておくと、スピンのモーメントと磁気モーメントは反対向きで大きさもg因子\(g_S(\sim 2)\)倍違うこと（正確には、\(\bm{m}_S=-g_S\mu_B\bm{S}/\hbar\)）には注意がいるが、ここら辺の事情は量子力学を勉強してみてほしい。ここでは、右側の図はスピンがどちらの向きにどれだけ偏っているかを表す指標であると思ってほしい。例えば、0に近い値だとほぼ偏りがなく、1に近いとスピンが下向きに揃っている状態に対応している。
+        </p>
     <h2>イジング模型シミュレーター</h2>
     <!-- ↓ ここからイジングシミュレーター本体 ↓ -->
     <div id="ising-simulator">
@@ -70,7 +77,7 @@
           <canvas id="isingCanvas" width="400" height="400"></canvas>
         </div>
         <div>
-          <h3>スピン期待値の履歴</h3>
+          <h3>各stepでの磁化の履歴</h3>
           <canvas id="magChart" width="380" height="380" style="border:none;"></canvas>
         </div>
       </div>
@@ -79,16 +86,44 @@
     <!-- ↑ ここまでイジングシミュレーター本体 ↑ -->
     <h2>使い方</h2>
     <ol>
-      <li>温度 T、相互作用 J、格子サイズ N などのパラメータを設定します。(格子サイズは大きすぎると計算が重くなります。)</li>
-      <li>「シミュレーション開始」ボタンをクリックして、シミュレーションを開始します。（初期条件によっては相転移温度以下でもドメインができることがあるので何回か回してみてください。）</li>
-      <li>スピン配置やスピン期待値の履歴がリアルタイムで表示されます。</li>
-      <li>「停止」ボタンをクリックして、シミュレーションを停止します。</li>
+      <li>温度\(T\)、相互作用\(J\)、格子サイズ\(N\)などのパラメータを設定する。</li>
+      <li>「シミュレーション開始」ボタンをクリックして、シミュレーションを開始。（初期条件によっては相転移温度以下でもドメインができることがあるので何回か回してみて。）</li>
+      <li>スピン配置やスピン期待値の履歴がリアルタイムで表示される。</li>
+      <li>「停止」ボタンをクリックして、シミュレーションを停止。</li>
     </ol>
 
     <h2>シミュレーターがしていること</h2>
     <p>
-      工事中
+      まず、理論的な背景について述べておこう。シミュレーターを回した人は体感できたと思うが、ある温度以上だとスピンの上下が変化し続け、ある温度以下ではスピンが（同じ向きあるいは逆向きに）揃った配置になることがわかったであろう。この現象は、相転移と呼ばれており、実際に磁性体で起こっている現象である（磁石は温めると磁石でなくなる）。
     </p>
+
+    <h2>熱力学量の計測</h2>
+    <div id="survey-simulator">
+        <div class="control-panel">
+            <div class="input-row"><label>T_min:</label> <input type="number" id="T_min" value="0" step="0.1"></div>
+            <div class="input-row"><label>T_max:</label> <input type="number" id="T_max" value="4" step="0.1"></div>
+            <div class="input-row"><label>T_step:</label> <input type="number" id="T_step" value="0.2" step="0.1"></div>
+            <div class="input-row"><label>J:</label> <input type="number" id="J_stat" value="1.0" step="0.1"></div>
+            <div class="input-row"><label>格子サイズ N:</label> <input type="number" id="N_stat" value="20" step="10"></div>
+            <div class="input-row"><label>熱化ステップ数:</label> <input type="number" id="thermalSteps_stat" value="100" step="100"></div>
+            <div class="input-row"><label>サンプリング間隔:</label> <input type="number" id="sampleInterval" value="10" step="1"></div>
+            <div class="input-row"><label>サンプル数/Bin:</label> <input type="number" id="samplesPerBin" value="100" step="1"></div>
+            <div class="input-row"><label>Bin数:</label> <input type="number" id="numBins" value="100" step="1"></div>
+            <div style="height: 10px;"></div>
+            <button onclick="startSurvey()">計算開始</button>
+        </div>
+
+        <div class="plot-area">
+            <div>
+                <h3>磁化の温度依存性</h3>
+                <canvas id="mag_vs_T" width="380" height="380"></canvas>
+            </div>
+            <div>
+                <h3>比熱の温度依存性</h3>
+                <canvas id="cv_vs_T" width="380" height="380"></canvas>
+            </div>
+        </div>
+    </div>
   </div>
 
 </div>
@@ -153,7 +188,7 @@ function initializeMagnetizationChart() {
     type: 'line',
     data: {
       datasets: [{
-        label: 'スピン期待値',
+        label: '<σ>',
         data: [],
         borderColor: 'red',
         borderWidth: 4,
@@ -185,7 +220,7 @@ function initializeMagnetizationChart() {
         y: {
           type: 'linear',
           min: -1, max: 1,
-          title: { display: true, text: 'スピン期待値', color: 'black', font: { size: 18 } },
+          title: { display: true, text: '<σ>', color: 'black', font: { size: 18 } },
           ticks: { color: 'black', font: { size: 16 }, stepSize: 0.5 },
           grid: { color: '#cccccc', tickLength: 5 }
         }
@@ -232,6 +267,199 @@ function simulate() {
     }
   }
   setTimeout(() => requestAnimationFrame(simulate), stepSpeed);
+}
+</script>
+
+<!-- スクリプト for 統計計算モード -->
+<script>
+let survey_spins = [];  // 統計計算用は独立
+
+function initSurveySpins(N) {
+  survey_spins = Array.from({length: N}, () =>
+    Array.from({length: N}, () => Math.random() < 0.5 ? 1 : -1));
+}
+
+function metropolisSurveyStep(N, J, T) {
+  for (let step = 0; step < N*N; step++) {
+    let i = Math.floor(Math.random() * N);
+    let j = Math.floor(Math.random() * N);
+    let s = survey_spins[i][j];
+    let nb = survey_spins[(i+1)%N][j] + survey_spins[(i-1+N)%N][j] 
+            + survey_spins[i][(j+1)%N] + survey_spins[i][(j-1+N)%N];
+    let dE = (-1) * 2 * (-1) * J * s * nb;
+    if (dE <= 0) {
+      survey_spins[i][j] *= -1;
+    }
+    else if (Math.random() < Math.exp(-dE / T)) {
+      survey_spins[i][j] *= -1;
+    }
+  }
+}
+
+function computeSurveyMagnetization(N) {
+  let m = 0;
+  for (let i = 0; i < N; i++) {
+    for (let j = 0; j < N; j++) {
+      m += survey_spins[i][j];
+    }
+  }
+  return m / (N*N);
+}
+
+function computeSurveyEnergy(N, J) {
+  let e = 0;
+  for (let i = 0; i < N; i++) {
+    for (let j = 0; j < N; j++) {
+      let s = survey_spins[i][j];
+      let nb = survey_spins[(i+1)%N][j] + survey_spins[i][(j+1)%N];
+      e += -J * s * nb;
+    }
+  }
+  return e;
+}
+
+let magData=[], cvData=[], magChart2, cvChart;
+function initializeCharts() {
+    if (magChart2) {
+    magChart2.destroy();
+    magChart2 = null;
+  }
+  if (cvChart) {
+    cvChart.destroy();
+    cvChart = null;
+  }
+
+  magData = [];
+  cvData = [];
+
+  magChart2 = new Chart(document.getElementById('mag_vs_T').getContext('2d'), {
+    type: 'scatter',
+    data: { datasets: [{ label: '|<M>|', data: magData, borderColor: 'red', showLine: true }] },
+    options: {
+      animation: false,
+      plugins: {
+        legend: { labels: { color: 'black', font: { size: 16 } } }
+      },
+      scales: {
+        x: { 
+          title: { text: 'T', display: true, font: { size: 18 }, color: 'black' },
+          ticks: { color: 'black' }
+        },
+        y: { 
+          title: { text: '磁化の絶対値 |M|', display: true, font: { size: 18 }, color: 'black' },
+          ticks: { color: 'black' },
+          min: 0, max: 1 
+        }
+      }
+    }
+  });
+
+  cvChart = new Chart(document.getElementById('cv_vs_T').getContext('2d'), {
+    type: 'scatter',
+    data: { datasets: [{ label: '<C>', data: cvData, borderColor: 'blue', showLine: true }] },
+    options: {
+      animation: false,
+      plugins: {
+        legend: { labels: { color: 'black', font: { size: 16 } } }
+      },
+      scales: {
+        x: { 
+          title: { text: 'T', display: true, font: { size: 18 }, color: 'black' },
+          ticks: { color: 'black' }
+        },
+        y: { 
+          title: { text: '比熱 C', display: true, font: { size: 18 }, color: 'black' },
+          ticks: { color: 'black' }
+        }
+      }
+    }
+  });
+}
+
+Chart.register({
+  id: 'errorBar',
+  afterDatasetsDraw(chart) {
+    const ctx = chart.ctx;
+    chart.data.datasets.forEach((dataset,i)=>{
+      dataset.data.forEach(pt=>{
+        if(pt.error){
+          const meta = chart.getDatasetMeta(i);
+          const x = meta.xScale.getPixelForValue(pt.x);
+          const y = meta.yScale.getPixelForValue(pt.y);
+          const yTop = meta.yScale.getPixelForValue(pt.y + pt.error);
+          const yBottom = meta.yScale.getPixelForValue(pt.y - pt.error);
+          ctx.beginPath();
+          ctx.moveTo(x,yTop); ctx.lineTo(x,yBottom);
+          ctx.moveTo(x-5,yTop); ctx.lineTo(x+5,yTop);
+          ctx.moveTo(x-5,yBottom); ctx.lineTo(x+5,yBottom);
+          ctx.strokeStyle = 'black'; ctx.stroke();
+        }
+      });
+    });
+  }
+});
+
+let runningSurvey = false;
+let cancelSurvey = false;
+
+async function startSurvey() {
+  if (runningSurvey) {
+    // 既に実行中なら前の計算をキャンセルしてから新たに実行
+    cancelSurvey = true;
+    await new Promise(r => setTimeout(r, 50)); // 少し待つ（前のループにキャンセルを認識させる）
+  }
+
+  // 新規開始
+  runningSurvey = true;
+  cancelSurvey = false;
+  let T_min = parseFloat(document.getElementById('T_min').value);
+  let T_max = parseFloat(document.getElementById('T_max').value);
+  let T_step = parseFloat(document.getElementById('T_step').value);
+  let J = parseFloat(document.getElementById('J_stat').value);
+  let N = parseInt(document.getElementById('N_stat').value);
+  let thermalSteps = parseInt(document.getElementById('thermalSteps_stat').value);
+  let numBins = parseInt(document.getElementById('numBins').value);
+  let samplesPerBin = parseInt(document.getElementById('samplesPerBin').value);
+  let sampleInterval = parseInt(document.getElementById('sampleInterval').value);
+
+  // データとグラフを初期化
+  if (magChart2) { magChart2.destroy(); magChart2 = null; }
+  if (cvChart) { cvChart.destroy(); cvChart = null; }
+  magData = []; cvData = [];
+  initializeCharts();
+
+  for (let T = T_max; T >= T_min + 1e-8; T -= T_step) {
+    if (cancelSurvey) break;  // 途中でキャンセル要求が出たら即終了
+
+    initSurveySpins(N);
+    for (let i = 0; i < thermalSteps; i++) metropolisSurveyStep(N, J, T);
+    let binM = [], binC = [];
+    for (let b = 0; b < numBins; b++) {
+      let mags = [], enes = [];
+      for (let s = 0; s < samplesPerBin; s++) {
+        for (let i = 0; i < sampleInterval; i++) metropolisSurveyStep(N, J, T);
+        mags.push(computeSurveyMagnetization(N));
+        enes.push(computeSurveyEnergy(N, J));
+      }
+      let avgM = mags.reduce((a, b) => a + b, 0) / samplesPerBin;
+      let avgE = enes.reduce((a, b) => a + b, 0) / samplesPerBin;
+      let varE = enes.reduce((a, b) => a + b * b, 0) / samplesPerBin - avgE * avgE;
+      let C = varE / (T * T * N * N);
+      binM.push({ mean: avgM, var: 0 });
+      binC.push({ mean: C, var: 0 });
+    }
+    let meanM = binM.reduce((a, b) => a + b.mean, 0) / numBins;
+    let varM = binM.reduce((a, b) => a + b.mean ** 2, 0) / numBins - meanM ** 2;
+    let meanC = binC.reduce((a, b) => a + b.mean, 0) / numBins;
+    let varC = binC.reduce((a, b) => a + b.mean ** 2, 0) / numBins - meanC ** 2;
+    magData.push({ x: T, y: Math.abs(meanM), error: Math.sqrt(varM) });
+    cvData.push({ x: T, y: meanC, error: Math.sqrt(varC) });
+    magChart2.update();
+    cvChart.update();
+    await new Promise(r => setTimeout(r, 10));
+  }
+
+  runningSurvey = false;
 }
 </script>
 
