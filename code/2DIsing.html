@@ -431,14 +431,14 @@ async function startSurvey() {
   for (let T = T_max; T >= T_min + 1e-8; T -= T_step) {
     if (cancelSurvey) break;  // 途中でキャンセル要求が出たら即終了
 
-    initSurveySpins(N);
-    for (let i = 0; i < thermalSteps; i++) metropolisSurveyStep(N, J, T);
     let binM = [], binC = [];
     for (let b = 0; b < numBins; b++) {
+      initSurveySpins(N);
+      for (let i = 0; i < thermalSteps; i++) metropolisSurveyStep(N, J, T);
       let mags = [], enes = [];
       for (let s = 0; s < samplesPerBin; s++) {
         for (let i = 0; i < sampleInterval; i++) metropolisSurveyStep(N, J, T);
-        mags.push(computeSurveyMagnetization(N));
+        mags.push(Math.abs(computeSurveyMagnetization(N)));
         enes.push(computeSurveyEnergy(N, J));
       }
       let avgM = mags.reduce((a, b) => a + b, 0) / samplesPerBin;
@@ -452,11 +452,11 @@ async function startSurvey() {
     let varM = binM.reduce((a, b) => a + b.mean ** 2, 0) / numBins - meanM ** 2;
     let meanC = binC.reduce((a, b) => a + b.mean, 0) / numBins;
     let varC = binC.reduce((a, b) => a + b.mean ** 2, 0) / numBins - meanC ** 2;
-    magData.push({ x: T, y: Math.abs(meanM), error: Math.sqrt(varM) });
+    magData.push({ x: T, y: meanM, error: Math.sqrt(varM) });
     cvData.push({ x: T, y: meanC, error: Math.sqrt(varC) });
     magChart2.update();
     cvChart.update();
-    await new Promise(r => setTimeout(r, 10));
+    await new Promise(r => setTimeout(r, 1));
   }
 
   runningSurvey = false;
