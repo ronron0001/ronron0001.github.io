@@ -728,7 +728,7 @@ mjx-container[display="true"] {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
-  width: 220px;
+  width: 100%;
 }
 
 #xy-simulator .control-panel input {
