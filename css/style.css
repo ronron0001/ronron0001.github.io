@@ -707,6 +707,65 @@ mjx-container[display="true"] {
   border: 1px solid black;
   display: block;
 }
+
+#xy-simulator {
+  margin: 20px auto;
+  max-width: 750px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#xy-simulator .control-panel {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+#xy-simulator .control-panel > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  width: 220px;
+}
+
+#xy-simulator .control-panel input {
+  width: 80px;
+}
+
+#xy-simulator .control-panel button {
+  height: 40px;
+  font-size: 16px;
+  margin-top: 8px;
+  width: 180px;
+  white-space: nowrap;
+}
+
+#xy-simulator .plot-area {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+#xy-simulator .plot-area > div {
+  flex: 1 1 0;
+  min-width: 200px;
+  max-width: 600px; /* 最大幅を設定 */
+}
+
+#xy-simulator canvas {
+  width: 100% !important;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  border: 1px solid black;
+  display: block;
+}
+
 /* ===============================
    スマホ用スタイル（幅768px以下）
    =============================== */

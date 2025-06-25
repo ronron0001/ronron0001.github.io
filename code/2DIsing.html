@@ -451,7 +451,7 @@ async function startSurvey() {
     let meanM = binM.reduce((a, b) => a + b.mean, 0) / numBins;
     let varM = binM.reduce((a, b) => a + b.mean ** 2, 0) / numBins - meanM ** 2;
     let meanC = binC.reduce((a, b) => a + b.mean, 0) / numBins;
-    let varC = binC.reduce((a, b) => a + b.mean ** 2, 0) / numBins - meanC ** 2;
+    let varC = binC.reduce((a, b) => a + b.mean ** 2, 0) / (numBins-1) - meanC ** 2 *numBins / (numBins - 1);
     magData.push({ x: T, y: meanM, error: Math.sqrt(varM) });
     cvData.push({ x: T, y: meanC, error: Math.sqrt(varC) });
     magChart2.update();

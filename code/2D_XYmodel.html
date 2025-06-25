@@ -1,0 +1,308 @@
+<!DOCTYPE HTML>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>研究内容 | Takuya Matsumoto / 松本 卓也</title>
+<!--[if lt IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
+<![endif]-->
+<link href="../css/style.css" rel="stylesheet" media="all">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div id="container">
+  <header id="header">
+    <h1>Takuya Matsumoto / 松本 卓也</h1>
+  </header>
+
+  <div id="nav_frame">
+    <nav>
+      <ul id="nav1">
+        <li><a href="../index.html">ホーム</a></li>
+        <li><a href="../research.html">研究内容</a></li>
+        <li><a href="../cv.html">経歴</a></li>
+        <li><a href="../publications.html">研究業績</a></li>
+        <li><a href="../access.html">連絡先</a></li>
+        <li><a href="../review.html">書評</a></li>
+        <li><a href="../blog.html">Blog</a></li>
+        <li><a href="../index-e.html">ENGLISH</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div id="main">
+    <h1>2D XYモデルシミュレーター</h1>
+    <h2>二次元XYモデルとは？</h2>
+    <h2>トポロジカル相転移、BKT転移とは？</h2>
+    <h2>シミュレーター</h2>
+    <div id="xy-simulator">
+      <div class="control-panel">
+        <div><label>温度 T:</label> <input type="number" id="temperature" value="0.0" step="0.1"></div>
+        <div><label>相互作用 J:</label> <input type="number" id="interaction" value="1.0" step="0.1"></div>
+        <div><label>格子サイズ N:</label> <input type="number" id="latticeSize" value="50" step="10"></div>
+        <div><label>熱化ステップ数:</label> <input type="number" id="thermalSteps" value="0" step="10"></div>
+        <div><label>更新ステップ間隔:</label> <input type="number" id="updateInterval" value="1" step="1"></div>
+        <div><label>描画時間(ms):</label> <input type="number" id="stepSpeed" value="100" step="10"></div>
+        <button onclick="startSimulation()">シミュレーション開始</button>
+        <button onclick="stopSimulation()">停止</button>
+      </div>
+      <div class="plot-area">
+        <div>
+          <h3>スピン配置</h3>
+          <canvas id="xyCanvas" width="400" height="400"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <h2>比熱の温度依存性計算</h2>
+    <div id="survey-simulator">
+      <div class="control-panel">
+        <div><label>T_min:</label> <input type="number" id="T_min" value="0.0" step="0.1"></div>
+        <div><label>T_max:</label> <input type="number" id="T_max" value="2.0" step="0.1"></div>
+        <div><label>T_step:</label> <input type="number" id="T_step" value="0.1" step="0.1"></div>
+        <div><label>J:</label> <input type="number" id="J_stat" value="1.0" step="0.1"></div>
+        <div><label>格子サイズ N:</label> <input type="number" id="N_stat" value="15" step="10"></div>
+        <div><label>熱化ステップ数:</label> <input type="number" id="thermalSteps_stat" value="1000" step="100"></div>
+        <div><label>サンプリング間隔:</label> <input type="number" id="sampleInterval" value="10" step="1"></div>
+        <div><label>サンプル数/Bin:</label> <input type="number" id="samplesPerBin" value="1000" step="1"></div>
+        <div><label>Bin数:</label> <input type="number" id="numBins" value="5" step="1"></div>
+        <button onclick="startSurvey()">計算開始</button>
+      </div>
+      <div class="plot-area">
+        <div>
+          <h3>比熱 C の温度依存性</h3>
+          <canvas id="cv_vs_T" width="400" height="400"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let spins = [], J = 1.0, T = 0.8, thermalSteps = 0, stepSpeed = 1, updateInterval = 10;
+let currentStep = 0, running = false, N = 20;
+let canvas, ctx;
+
+function initSpins() {
+  spins = [];
+  for (let i = 0; i < N; i++) {
+    spins[i] = [];
+    for (let j = 0; j < N; j++) {
+      spins[i][j] = Math.random() * 2 * Math.PI;
+    }
+  }
+}
+
+function drawSpins() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  let cellSize = canvas.width / N;
+  let len = cellSize * 0.8; // 矢印長さ（セルサイズに対して長め）
+  let lineWidth = cellSize * 0.1; // 線の太さもセルサイズ比例
+  ctx.lineWidth = lineWidth;
+  ctx.strokeStyle = 'black';
+  for (let i = 0; i < N; i++) {
+    for (let j = 0; j < N; j++) {
+      let theta = spins[i][j];
+      let cx = i * cellSize + cellSize / 2;
+      let cy = j * cellSize + cellSize / 2;
+      let dx = (len / 2) * Math.cos(theta);
+      let dy = (len / 2) * Math.sin(theta);
+      ctx.beginPath();
+      ctx.moveTo(cx - dx, cy - dy);
+      ctx.lineTo(cx + dx, cy + dy);
+      ctx.stroke();
+      let headlen = cellSize * 0.15;
+      let angle = Math.atan2(dy, dx);
+      ctx.beginPath();
+      ctx.moveTo(cx + dx, cy + dy);
+      ctx.lineTo(cx + dx - headlen * Math.cos(angle - Math.PI/6), cy + dy - headlen * Math.sin(angle - Math.PI/6));
+      ctx.moveTo(cx + dx, cy + dy);
+      ctx.lineTo(cx + dx - headlen * Math.cos(angle + Math.PI/6), cy + dy - headlen * Math.sin(angle + Math.PI/6));
+      ctx.stroke();
+    }
+  }
+}
+
+function metropolisStep() {
+  for (let step = 0; step < (N * N); step++) {
+    let i = Math.floor(Math.random() * N);
+    let j = Math.floor(Math.random() * N);
+    let theta_old = spins[i][j];
+    let theta_new = theta_old + (Math.random() - 0.5) * Math.PI / 2;
+    let dE = deltaEnergy(i, j, theta_old, theta_new);
+    if (dE <= 0 || Math.random() < Math.exp(-dE / T)) {
+      spins[i][j] = (theta_new + 2*Math.PI) % (2*Math.PI);
+    }
+  }
+}
+
+function deltaEnergy(i, j, theta_old, theta_new) {
+  let sum = 0;
+  const neighbors = [[(i+1)%N, j], [(i-1+N)%N, j], [i, (j+1)%N], [i, (j-1+N)%N]];
+  for (let [ni, nj] of neighbors) {
+    let theta_nb = spins[ni][nj];
+    sum += Math.cos(theta_new - theta_nb) - Math.cos(theta_old - theta_nb);
+  }
+  return -J * sum;
+}
+
+function startSimulation() {
+  T = parseFloat(document.getElementById('temperature').value);
+  J = parseFloat(document.getElementById('interaction').value);
+  N = parseInt(document.getElementById('latticeSize').value);
+  thermalSteps = parseInt(document.getElementById('thermalSteps').value);
+  updateInterval = parseInt(document.getElementById('updateInterval').value);
+  stepSpeed = parseInt(document.getElementById('stepSpeed').value);
+  canvas = document.getElementById('xyCanvas');
+  ctx = canvas.getContext('2d');
+  initSpins();
+  currentStep = 0;
+  running = true;
+  requestAnimationFrame(simulate);
+}
+
+function stopSimulation() { running = false; }
+
+function simulate() {
+  if (!running) return;
+  metropolisStep();
+  currentStep++;
+  if (currentStep > thermalSteps && (currentStep - thermalSteps) % updateInterval === 0) {
+    drawSpins();
+  }
+  setTimeout(() => requestAnimationFrame(simulate), stepSpeed);
+}
+</script>
+
+<script>
+// 比熱計算部分
+let cvChart = null;
+
+function initializeCvChart() {
+  if (cvChart) {
+    cvChart.destroy();
+    cvChart = null;
+  }
+  cvChart = new Chart(document.getElementById('cv_vs_T').getContext('2d'), {
+    type: 'scatter',
+    data: { datasets: [{ label: 'C', data: [], borderColor: 'blue', showLine: true }] },
+    options: {
+      animation: false,
+      plugins: {
+        legend: { labels: { color: 'black', font: { size: 16 } } }
+      },
+      scales: {
+        x: { title: { text: 'T', display: true, font: { size: 18 }, color: 'black' } },
+        y: { title: { text: '比熱 C', display: true, font: { size: 18 }, color: 'black' } }
+      }
+    }
+  });
+}
+
+let runningSurvey = false;
+let cancelSurvey = false;
+
+async function startSurvey() {
+  if (runningSurvey) {
+    cancelSurvey = true;
+    await new Promise(r => setTimeout(r, 50));
+  }
+
+  runningSurvey = true;
+  cancelSurvey = false;
+
+  const Tmin = parseFloat(document.getElementById('T_min').value);
+  const Tmax = parseFloat(document.getElementById('T_max').value);
+  const Tstep = parseFloat(document.getElementById('T_step').value);
+  const J = parseFloat(document.getElementById('J_stat').value);
+  const N = parseInt(document.getElementById('N_stat').value);
+  const thermalSteps = parseInt(document.getElementById('thermalSteps_stat').value);
+  const sampleInterval = parseInt(document.getElementById('sampleInterval').value);
+  const samplesPerBin = parseInt(document.getElementById('samplesPerBin').value);
+  const numBins = parseInt(document.getElementById('numBins').value);
+
+  initializeCvChart();
+
+  for (let T = Tmax; T >= Tmin + 1e-8; T -= Tstep) {
+    if (cancelSurvey) break;
+
+    let Cbins = [];
+    for (let b = 0; b < numBins; b++) {
+      let spins = Array.from({length: N}, () => Array.from({length: N}, () => Math.random()*2*Math.PI));
+      for (let t = 0; t < thermalSteps; t++) metropolisSurveyStep(spins,N,J,T);
+      let energies = [];
+      for (let s = 0; s < samplesPerBin; s++) {
+        for (let t = 0; t < sampleInterval; t++) metropolisSurveyStep(spins,N,J,T);
+        energies.push(computeSurveyEnergy(spins,N,J));
+      }
+      let avgE = energies.reduce((a,b)=>a+b,0)/energies.length;
+      let varE = energies.reduce((a,b)=>a+b*b,0)/energies.length - avgE*avgE;
+      Cbins.push(varE/(T*T*N*N)*energies.length/(energies.length-1));
+    }
+    let Cmean = Cbins.reduce((a,b)=>a+b)/Cbins.length;
+    let Cvar = Cbins.reduce((a,b)=>a+b*b)/(Cbins.length-1) - Cmean*Cmean * Cbins.length/(Cbins.length-1);
+
+    cvChart.data.datasets[0].data.push({x:T, y:Cmean, error: Math.sqrt(Cvar)});
+    cvChart.update();
+    await new Promise(r => setTimeout(r, 1));
+  }
+  runningSurvey = false;
+}
+
+function metropolisSurveyStep(spins,N,J,T) {
+  for (let step = 0; step < N*N; step++) {
+    let i = Math.floor(Math.random()*N);
+    let j = Math.floor(Math.random()*N);
+    let theta_old = spins[i][j];
+    let theta_new = theta_old + (Math.random()-0.5)*Math.PI/2;
+    let sum=0;
+    for (let [di,dj] of [[1,0],[-1,0],[0,1],[0,-1]]) {
+      let ni=(i+di+N)%N, nj=(j+dj+N)%N;
+      sum += Math.cos(theta_new-spins[ni][nj]) - Math.cos(theta_old-spins[ni][nj]);
+    }
+    let dE = -J*sum;
+    if (dE <= 0 || Math.random()<Math.exp(-dE/T)) spins[i][j] = (theta_new+2*Math.PI)%(2*Math.PI);
+  }
+}
+
+function computeSurveyEnergy(spins,N,J) {
+  let e=0;
+  for (let i=0;i<N;i++) for (let j=0;j<N;j++) {
+    let theta=spins[i][j];
+    e += -J*Math.cos(theta - spins[(i+1)%N][j]);
+    e += -J*Math.cos(theta - spins[i][(j+1)%N]);
+  }
+  return e;
+}
+
+Chart.register({
+  id: 'errorBar',
+  afterDatasetsDraw(chart) {
+    const ctx = chart.ctx;
+    chart.data.datasets.forEach((dataset,i)=>{
+      dataset.data.forEach(pt=>{
+        if(pt.error){ // 追加情報として pt.error に格納しておく
+          const meta = chart.getDatasetMeta(i);
+          const x = meta.xScale.getPixelForValue(pt.x);
+          const y = meta.yScale.getPixelForValue(pt.y);
+          const yTop = meta.yScale.getPixelForValue(pt.y + pt.error);
+          const yBottom = meta.yScale.getPixelForValue(pt.y - pt.error);
+          ctx.beginPath();
+          ctx.moveTo(x, yTop);
+          ctx.lineTo(x, yBottom);
+          ctx.moveTo(x-5, yTop);
+          ctx.lineTo(x+5, yTop);
+          ctx.moveTo(x-5, yBottom);
+          ctx.lineTo(x+5, yBottom);
+          ctx.strokeStyle = 'black';
+          ctx.stroke();
+        }
+      });
+    });
+  }
+});
+</script>
+</body>
+</html>
