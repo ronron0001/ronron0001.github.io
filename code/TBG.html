@@ -1,0 +1,202 @@
+<!DOCTYPE HTML>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>研究内容 | Takuya Matsumoto / 松本 卓也</title>
+<!--[if lt IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
+<![endif]-->
+<link href="../css/style.css" rel="stylesheet" media="all">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</head>
+<body>
+<div id="container">
+  <header id="header">
+    <h1>Takuya Matsumoto / 松本 卓也</h1>
+  </header>
+
+  <div id="nav_frame">
+    <nav>
+      <ul id="nav1">
+        <li><a href="../index.html">ホーム</a></li>
+        <li><a href="../research.html">研究内容</a></li>
+        <li><a href="../cv.html">経歴</a></li>
+        <li><a href="../publications.html">研究業績</a></li>
+        <li><a href="../access.html">連絡先</a></li>
+        <li><a href="../review.html">書評</a></li>
+        <li><a href="../blog.html">Blog</a></li>
+        <li><a href="../index-e.html">ENGLISH</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div id="main">
+    <h1>ねじれ二層グラフェン(TBG)のシミュレーター</h1>
+    <h2>ねじれ二層グラフェン（TBG）とは？</h2>
+        <p>
+            まず単層グラフェンについて紹介しておこう。グラフェンは、人類が初めて手に入れた二次元物質（単原子分の厚みしかないと言う意味で二次元）である。発見者であるアンドレ・ゲイムとコンスタンチン・ノボセロフは2010年のノーベル物理学賞を受賞している。グラファイトと呼ばれる炭素原子が三次元構造を組んだ物質をセロハンテープで剥がすことで発見された（このような偉大な発見が、実は小学生でも思いつきそうな方法で発見されたことは特筆すべき事項であろう）。グラフェンの結晶構造は炭素原子が六角形状（ハニカム格子）に並んだ構造をしており、炭素原子同士が共有結合(sp2混成軌道による\(\sigma\)結合)で強く結合していることから、強度が高く、熱伝導率も高い。一方、\(p_z\)軌道による\(\pi\)結合は弱く、\(\pi\)電子が自由に動くことができるため(バンド構造的にはDirac分散を作るため)、電気伝導率も高い。グラフェンは、このような特性から、次世代の電子デバイスや材料として注目されている。
+        </p>
+        <p>
+            さて、本題のねじれ二層グラフェン（TBG）だが、これは二層のグラフェンを小さい角度でねじって重ね合わせた物質（人工物質）である。ねじれ二層グラフェンはその実空間の格子構造を見るだけでも面白い。モアレ（Moiré）構造と言って、元々の六角形の周期構造がさらに長周期になったような構造が得られる。わずかにズレた二つの周期構造から新たな長周期構造が生まれたと言うことであるが、実は時間座標における現象である音のうねりと同じ現象である。音のうねりは少し異なる周波数の音が二つあったときに音の増大が長周期で起こる現象であった。つまり、モアレ構造は、音のうねりの空間座標バージョンなのである。面白いのは、実空間の格子構造だけではない。小さなねじれ角では、波数空間に行くと、実空間の長周期構造を反映してブリルアンゾーンが小さくなる（正確には、完全に周期的ではないが、原子スケールを粗視化する連続体近似の下で新たなモアレブリルアンゾーンを定義できる）。そこではバンドの折りたたみによって、バンドの分散が平坦になることが知られていて、超伝導などの面白い現象が多数報告されている。もう少し踏み込んだ話をすると、これらの面白い現象はバンドの平坦化によって、運動エネルギーが抑制され、結果として電子相関効果が相対的に強くなっているためである。平坦なバンドが実空間では局在電子に対応することを考えれば、これはモアレ構造の内、AAスタッキング部分（二層のグラフェンがズレなく重なっているように見える部分）に電子が局在化していることの表れになっている。かなり踏み込んだ話をしたが、とりあえず、モアレ構造とは何かを下のシミュレーションを動かしながら感じ取って見てほしい。
+        </p>
+    <h2>ねじれ二層グラフェン（TBG）シミュレーター</h2>
+    <div id="tbg-simulator">
+        <div class="controls">
+            <div class="control-row">
+            <label for="thetaSlider">ねじれ角 θ (°):</label>
+            <div class="slider-wrapper">
+                <input type="range" id="thetaSlider" min="0" max="30" step="0.1" value="1.1">
+                <div class="slider-value" id="thetaVal">1.1°</div>
+            </div>
+            </div>
+            <div class="control-row">
+            <label for="rangeSlider">描画セル数 ±N:</label>
+            <div class="slider-wrapper">
+                <input type="range" id="rangeSlider" min="1" max="100" step="1" value="10">
+                <div class="slider-value" id="rangeVal">10</div>
+            </div>
+            </div>
+        </div>
+
+        <canvas id="tbgCanvas" width="600" height="600"></canvas>
+    </div>
+    <h2>連続体近似について</h2>
+  </div>
+</div>
+<script>
+    const canvas = document.getElementById("tbgCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const thetaSlider = document.getElementById("thetaSlider");
+    const rangeSlider = document.getElementById("rangeSlider");
+    const thetaVal = document.getElementById("thetaVal");
+    const rangeVal = document.getElementById("rangeVal");
+
+    thetaSlider.addEventListener("input", update);
+    rangeSlider.addEventListener("input", update);
+
+    function update() {
+    const theta = parseFloat(thetaSlider.value);
+    const range = parseInt(rangeSlider.value);
+    thetaVal.textContent = theta.toFixed(1);
+    rangeVal.textContent = range;
+    drawTBG(theta, range);
+    }
+
+    function drawTBG(thetaDeg, N) {
+    const width = canvas.width;
+    const height = canvas.height;
+    ctx.clearRect(0, 0, width, height);
+
+    const centerX = width / 2;
+    const centerY = height / 2;
+
+    const margin = 0.85;
+    const scale = margin * Math.min(width, height) / (2 * N + 2);
+    const sqrt3 = Math.sqrt(3);
+
+    // 格子ベクトル（共通）
+    const a1 = [1 * scale, 0 * scale];
+    const a2 = [1 / 2 * scale,  - sqrt3 / 2 * scale];
+
+    // 副格子（共通）
+    const drA = [
+        0,
+        0
+    ];
+    const drB = [
+        1/3 * a1[0] + 1/3 * a2[0],
+        1/3 * a1[1] + 1/3 * a2[1]
+    ];
+
+    const thetaRad = thetaDeg * Math.PI / 180;
+
+    function rotate(x, y, angle) {
+        return [
+        Math.cos(angle) * x - Math.sin(angle) * y,
+        Math.sin(angle) * x + Math.cos(angle) * y
+        ];
+    }
+
+    function drawCircle(x, y, color) {
+        ctx.beginPath();
+        ctx.arc(x, y, Math.max(0.5, scale * 0.25), 0, 2 * Math.PI);
+        ctx.fillStyle = color;
+        ctx.fill();
+    }
+
+    function drawLayer(angle, color, a1, a2, drA, drB) {
+        for (let i = -N; i <= N; i++) {
+        for (let j = -N; j <= N; j++) {
+            const base = [
+            i * a1[0] + j * a2[0],
+            i * a1[1] + j * a2[1]
+            ];
+            const A = rotate(base[0] + drA[0], base[1] + drA[1], angle);
+            const B = rotate(base[0] + drB[0], base[1] + drB[1], angle);
+            drawCircle(centerX + A[0], centerY + A[1], color);
+            drawCircle(centerX + B[0], centerY + B[1], color);
+        }
+        }
+    }
+
+    function drawUnitCell(a1, a2, angle, color) {
+        const corners = [
+        [0, 0],
+        a1,
+        [a1[0] + a2[0], a1[1] + a2[1]],
+        a2,
+        [0, 0]
+        ].map(v => rotate(v[0], v[1], angle));
+
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.5;
+        ctx.moveTo(centerX + corners[0][0], centerY + corners[0][1]);
+        for (let k = 1; k < corners.length; k++) {
+        ctx.lineTo(centerX + corners[k][0], centerY + corners[k][1]);
+        }
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+    function drawMoireCell(theta) {
+        const L = scale / (2 * Math.sin(theta / 2));
+        const moireA1 = rotate(L* Math.cos(Math.PI / 6), L* Math.sin(Math.PI / 6), theta/2);
+        const moireA2 = rotate(L * Math.cos(-Math.PI / 6), L * Math.sin(-Math.PI / 6), theta/2);
+
+        ctx.beginPath();
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 1.5;
+        ctx.moveTo(centerX, centerY);
+        ctx.lineTo(centerX + moireA1[0], centerY + moireA1[1]);
+        ctx.lineTo(centerX + moireA1[0] + moireA2[0], centerY + moireA1[1] + moireA2[1]);
+        ctx.lineTo(centerX + moireA2[0], centerY + moireA2[1]);
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+    // 下層（青）
+    drawLayer(0, "blue", a1, a2, drA, drB);
+    drawUnitCell(a1, a2, 0, "blue");
+
+    // 上層（赤・ねじれ角 θ）
+    drawLayer(thetaRad, "red", a1, a2, drA, drB);
+    drawUnitCell(a1, a2, thetaRad, "red");
+
+    // モアレ単位胞（黒）
+    drawMoireCell(thetaRad);
+    }
+
+    update(); // 初期描画
+</script>
+
+<footer>
+  <div id="footer_color">
+    <div id="copy">Copyright &copy; Cis-trans, Inc. All rights reserved.</div>
+  </div>
+</footer>    
+</body>
+</html>

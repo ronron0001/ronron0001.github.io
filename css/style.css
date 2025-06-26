@@ -767,6 +767,41 @@ mjx-container[display="true"] {
   display: block;
 }
 
+/* ===== TBGシミュレーター専用スタイル ===== */
+#tbg-simulator .controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* ← 中央揃えにする */
+  gap: 16px;
+  margin: 1em 0;
+}
+
+#tbg-simulator .control-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 16px;
+}
+
+#tbg-simulator .slider-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#tbg-simulator input[type="range"] {
+  width: 200px;
+}
+
+#tbg-simulator .slider-value {
+  margin-top: 4px;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+}
+
 /* ===============================
    スマホ用スタイル（幅768px以下）
    =============================== */
@@ -903,5 +938,10 @@ mjx-container[display="true"] {
 
   #survey-simulator .plot-area {
     flex-direction: column;
+  }
+
+  #tbgCanvas {
+    width: 100%;
+    height: auto;
   }
 }
