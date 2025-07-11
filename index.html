@@ -31,20 +31,20 @@
     </nav>
   </div>
   <div id="top">
-    <img src="image/top.png" alt="" class="fade-in">
+    <img src="image/top.png" alt="" class="fade-in-left speed-normal delay-1">
   </div>
 
   <div id="main">
     <div id="about">
       <h2 class="mt0">ABOUT ME</h2>
-      <p class="fade-in">松本卓也の個人ホームページへようこそ。実験・理論の両面から、固体中の電子の振る舞いについての統一的理解を目指す物理学徒です。第一原理計算からの物質設計や極低温測定による量子輸送特性の研究などに興味があります。
+      <p class="fade-in-right speed-normal delay-2">松本卓也の個人ホームページへようこそ。実験・理論の両面から、固体中の電子の振る舞いについての統一的理解を目指す物理学徒です。第一原理計算からの物質設計や極低温測定による量子輸送特性の研究などに興味があります。
       </p>
     </div>
     <div id="news">
       <h3 class="top">NEWS &amp; TOPICS</h3>
       <ul>
-        <li class="fade-in">[受賞] 第16回低温科学研究センター研究交流会にて、ベスト・ポスター・アワードを受賞いたしました。(2025.02.17)</li>
-        <li class="fade-in">[ご報告] ホームページ開設しました。(2025.03.12)</li>
+        <li class="fade-in-left speed-normal delay-3">[受賞] 第16回低温科学研究センター研究交流会にて、ベスト・ポスター・アワードを受賞いたしました。(2025.02.17)</li>
+        <li class="fade-in-left speed-normal delay-3">[ご報告] ホームページ開設しました。(2025.03.12)</li>
       </ul>
     </div>
   </div>
@@ -67,16 +67,16 @@
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("show");
-            observer.unobserve(entry.target);  // 一度だけ表示
+          } else {
+            entry.target.classList.remove("show");
           }
         });
       },
       { threshold: 0.1 }
     );
 
-    document.querySelectorAll(".fade-in").forEach((el) => {
-      observer.observe(el);
-    });
+    document.querySelectorAll('.fade-in-up, .fade-in-down, .fade-in-left, .fade-in-right')
+      .forEach((el) => observer.observe(el));
   });
 </script>
 

@@ -596,17 +596,40 @@ mjx-container[display="true"] {
 }
 
 /* fade-in用 初期状態 */
-.fade-in {
+/* === 初期スタイル（共通）=== */
+.fade-in-up,
+.fade-in-down,
+.fade-in-left,
+.fade-in-right {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition-property: opacity, transform;
+  transition-timing-function: ease-out;
 }
 
-/* 表示された状態 */
-.fade-in.show {
+/* === 方向ごとの初期変位 === */
+.fade-in-up    { transform: translateY(20px); }
+.fade-in-down  { transform: translateY(-20px); }
+.fade-in-left  { transform: translateX(20px); }
+.fade-in-right { transform: translateX(-20px); }
+
+/* === 表示時（共通）=== */
+.show {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate(0, 0);
 }
+
+/* === アニメーション速度 === */
+.speed-fast   { transition-duration: 0.3s; }
+.speed-normal { transition-duration: 0.6s; }
+.speed-slow   { transition-duration: 1s; }
+
+/* === 遅延（任意個）=== */
+.delay-0 { transition-delay: 0s; }
+.delay-1 { transition-delay: 0.2s; }
+.delay-2 { transition-delay: 0.4s; }
+.delay-3 { transition-delay: 0.6s; }
+.delay-4 { transition-delay: 0.8s; }
+.delay-5 { transition-delay: 1s; }
 
 /* ========== ここからイジングシミュレーター専用スタイル ========== */
 
