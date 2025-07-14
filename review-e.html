@@ -49,6 +49,25 @@
     </ul>
   </div>
 </div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+          } else {
+            entry.target.classList.remove("show");
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('.fade-in-up, .fade-in-down, .fade-in-left, .fade-in-right')
+      .forEach((el) => observer.observe(el));
+  });
+</script>
 <footer>
   <div id="footer_color">
     <div id="copy">Copyright &copy; Cis-trans, Inc. All rights reserved.</div>
