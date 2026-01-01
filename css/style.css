@@ -577,41 +577,65 @@ blockquote p {
   min-width: 200px;
 }
 
-/* 年ごとの折りたたみ */
+/* ================================
+   年ごとの折りたたみ（強調表示）
+   ================================ */
+
 .year-block {
-  margin: 0 0 1.0rem 0;
+  margin: 0 0 1.2rem 0;
 }
 
+/* summary をリンク風に */
 .year-summary {
   cursor: pointer;
   font-weight: bold;
-  /* 既存の h3 に近い見た目にしたいなら調整 */
-  font-size: 1.1rem;
+  font-size: 1.15rem;
+
+  color: #1a4db3;                /* リンクっぽい青 */
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+
   padding: 0.2rem 0;
   list-style: none;
+  transition: color 0.15s ease;
 }
 
-/* デフォルトの三角マーカーをカスタム表示に */
+/* hover 時に色変化 */
+.year-summary:hover {
+  color: #d12c2c;                /* ホバーで赤系 */
+}
+
+/* デフォルトの三角マーカーを消す */
 .year-summary::-webkit-details-marker {
   display: none;
 }
 
+/* カスタム矢印 */
 .year-summary::before {
   content: "▶";
   display: inline-block;
   width: 1.2em;
   margin-right: 0.2em;
   transform-origin: 50% 50%;
-  transition: transform 0.15s ease;
+  transition: transform 0.15s ease, color 0.15s ease;
+  color: #444;
 }
 
+/* 開いたら矢印回転＋色変更 */
 .year-block[open] > .year-summary::before {
   transform: rotate(90deg);
+  color: #d12c2c;
 }
 
-/* 中身のインデント調整 */
+/* 開いたときに見出し色を少し変える */
+.year-block[open] > .year-summary {
+  color: #d12c2c;
+}
+
+/* 中身の余白 */
 .year-block > ol {
-  margin-top: 0.5rem;
+  margin-top: 0.6rem;
 }
 
 /* ===== MathJax 数式用のスタイル調整 ===== */
