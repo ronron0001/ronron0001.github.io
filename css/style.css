@@ -577,6 +577,43 @@ blockquote p {
   min-width: 200px;
 }
 
+/* 年ごとの折りたたみ */
+.year-block {
+  margin: 0 0 1.0rem 0;
+}
+
+.year-summary {
+  cursor: pointer;
+  font-weight: bold;
+  /* 既存の h3 に近い見た目にしたいなら調整 */
+  font-size: 1.1rem;
+  padding: 0.2rem 0;
+  list-style: none;
+}
+
+/* デフォルトの三角マーカーをカスタム表示に */
+.year-summary::-webkit-details-marker {
+  display: none;
+}
+
+.year-summary::before {
+  content: "▶";
+  display: inline-block;
+  width: 1.2em;
+  margin-right: 0.2em;
+  transform-origin: 50% 50%;
+  transition: transform 0.15s ease;
+}
+
+.year-block[open] > .year-summary::before {
+  transform: rotate(90deg);
+}
+
+/* 中身のインデント調整 */
+.year-block > ol {
+  margin-top: 0.5rem;
+}
+
 /* ===== MathJax 数式用のスタイル調整 ===== */
 
 mjx-container * {
