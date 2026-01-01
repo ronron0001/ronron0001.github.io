@@ -638,6 +638,66 @@ blockquote p {
   margin-top: 0.6rem;
 }
 
+/* ================================
+   書評：開閉トグル（学会発表と同じ）
+   ================================ */
+
+.toggle-block {
+  margin: 0 0 1.6rem 0;
+}
+
+/* summary をリンク風に */
+.toggle-summary {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.25rem;
+
+  color: #1a4db3;                /* 閉じている時：青 */
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+
+  padding: 0.2rem 0;
+  list-style: none;
+  transition: color 0.15s ease;
+}
+
+/* hover で反応 */
+.toggle-summary:hover {
+  color: #d12c2c;
+}
+
+/* デフォルトのマーカーを消す */
+.toggle-summary::-webkit-details-marker {
+  display: none;
+}
+
+/* 左の矢印 */
+.toggle-summary::before {
+  content: "▶";
+  display: inline-block;
+  width: 1.2em;
+  margin-right: 0.2em;
+  transform-origin: 50% 50%;
+  transition: transform 0.15s ease, color 0.15s ease;
+  color: #444;
+}
+
+/* 開いたとき */
+.toggle-block[open] > .toggle-summary {
+  color: #d12c2c;                /* 開いた時：赤 */
+}
+
+.toggle-block[open] > .toggle-summary::before {
+  transform: rotate(90deg);
+  color: #d12c2c;
+}
+
+/* 中身 */
+.toggle-block > ul {
+  margin-top: 0.8rem;
+}
+
 /* ===== MathJax 数式用のスタイル調整 ===== */
 
 mjx-container * {
